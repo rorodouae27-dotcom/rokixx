@@ -2,7 +2,7 @@
 --  KEY SYSTEM (Polsec)
 -- ============================================================
 local API = "EvOarUGwYIjAvNpF"
-local USER_KEY = getgenv().Key or ""
+local USER_KEY = getgenv().script_key or ""
 local url = "https://api.getpolsec.com/verify?apikey="..API.."&key="..USER_KEY
 local response = game:HttpGet(url)
 if response == "valid" then
