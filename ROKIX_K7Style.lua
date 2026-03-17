@@ -1,3 +1,18 @@
+-- ============================================================
+--  KEY SYSTEM (Polsec)
+-- ============================================================
+local API = "EvOarUGwYIjAvNpF"
+local USER_KEY = getgenv().Key or ""
+local url = "https://api.getpolsec.com/verify?apikey="..API.."&key="..USER_KEY
+local response = game:HttpGet(url)
+if response == "valid" then
+    print("Key valide")
+else
+    game.Players.LocalPlayer:Kick("Invalid Key")
+    return
+end
+-- ============================================================
+
 repeat task.wait() until game:IsLoaded()
 
 local Players = game:GetService("Players")
@@ -14,7 +29,7 @@ local writefile= writefile or (syn and syn.writefile)or (getgenv and getgenv().w
 local getconnections = getconnections or get_signal_cons or getconnects or (syn and syn.get_signal_cons)
 
 -- ============================================================
---  COLOURS (K7 palette – cyan accent)
+--  COLOURS (K7 palette â cyan accent)
 -- ============================================================
 local C = {
     BG        = Color3.fromRGB(10,10,13),
@@ -45,7 +60,7 @@ local function px(n) return math.floor(n*SC) end
 -- ============================================================
 local NORMAL_SPEED, CARRY_SPEED = 60, 30
 local STEAL_SPEED = 29.4          -- vitesse pendant le steal (waypoints 3+)
-local stealSpeedEnabled = false   -- si OFF = vitesse normale même en steal
+local stealSpeedEnabled = false   -- si OFF = vitesse normale mÃªme en steal
 local antiCollisionEnabled = false
 local antiCollisionConn = nil
 local speedToggled = false
@@ -276,7 +291,7 @@ end
 
 -- ============================================================
 --  ANTI COLLISION
---  Désactive la collision du HRP local pour passer à travers les joueurs
+--  DÃ©sactive la collision du HRP local pour passer Ã  travers les joueurs
 --  et les objets qui bloquent pendant le steal.
 -- ============================================================
 local function startAntiCollision()
@@ -389,7 +404,7 @@ end
 local function stopFloat()
     floatEnabled=false
     if floatConn then floatConn:Disconnect(); floatConn=nil end
-    -- On remet juste Y à 0, pas de -500 qui fait tomber brutalement
+    -- On remet juste Y Ã  0, pas de -500 qui fait tomber brutalement
     if hrp then
         hrp.AssemblyLinearVelocity=Vector3.new(hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z)
     end
@@ -623,7 +638,7 @@ end
 
 -- ============================================================
 --  DROP BRAINROT
---  Monte en l'air rapidement puis redescend fort pour lâcher l'animal
+--  Monte en l'air rapidement puis redescend fort pour lÃ¢cher l'animal
 -- ============================================================
 
 local function dropBrainrot()
@@ -635,7 +650,7 @@ local function dropBrainrot()
         hrp.AssemblyLinearVelocity.Z
     )
     task.wait(0.3)
-    -- Redescend d'un coup fort — c'est ce qui fait lâcher l'animal
+    -- Redescend d'un coup fort â c'est ce qui fait lÃ¢cher l'animal
     if hrp then
         hrp.AssemblyLinearVelocity = Vector3.new(
             hrp.AssemblyLinearVelocity.X,
@@ -679,7 +694,7 @@ local function isKnockedChar()
     local h2 = char:FindFirstChildOfClass("Humanoid")
     if h2 then
         local st = h2:GetState()
-        -- Tous les états qui indiquent un coup reçu
+        -- Tous les Ã©tats qui indiquent un coup reÃ§u
         if st == Enum.HumanoidStateType.Ragdoll
         or st == Enum.HumanoidStateType.Physics
         or st == Enum.HumanoidStateType.FallingDown
@@ -690,7 +705,7 @@ local function isKnockedChar()
     -- BoolValue "Ragdoll" / "IsRagdoll" que certains jeux utilisent
     local rv = char:FindFirstChild("Ragdoll") or char:FindFirstChild("IsRagdoll")
     if rv and rv:IsA("BoolValue") and rv.Value then return true end
-    -- Vélocité Y très négative = on vient de se faire envoyer
+    -- VÃ©locitÃ© Y trÃ¨s nÃ©gative = on vient de se faire envoyer
     if hrp and hrp.AssemblyLinearVelocity.Y < -35 then return true end
     -- BallSocketConstraints = ragdoll physique actif
     for _, d in ipairs(char:GetDescendants()) do
@@ -785,8 +800,8 @@ local function setBatAimbot(state)
     setRowActive("Bat Aimbot",batAimbotToggled)
 end
 
--- TP activate functions — placées ICI car elles ont besoin de setRowActive,
--- nineStop, nineStart, setAutoLeft, setAutoRight qui sont tous définis avant
+-- TP activate functions â placÃ©es ICI car elles ont besoin de setRowActive,
+-- nineStop, nineStart, setAutoLeft, setAutoRight qui sont tous dÃ©finis avant
 local function activateTPLeft()
     ragdollAutoActive = true
     setRowActive("TP Right", false)
@@ -795,7 +810,7 @@ local function activateTPLeft()
     task.spawn(function()
         doTPLeft()
         task.wait(0.2)
-        -- coupe l'autre côté et lance auto left
+        -- coupe l'autre cÃ´tÃ© et lance auto left
         if autoRightEnabled then autoRightEnabled=false; nineStop(); setRowActive("Auto Right",false) end
         autoLeftEnabled = true
         nineStop(); nineStart("left")
@@ -923,7 +938,7 @@ local function makeSectionLabel(text)
     local F=Instance.new("Frame",Scroll); F.Size=UDim2.new(1,0,0,px(28)); F.BackgroundTransparency=1; F.LayoutOrder=nextOrder()
     local line1=Instance.new("Frame",F); line1.Size=UDim2.new(0.18,0,0,1); line1.Position=UDim2.new(0,px(8),0.5,0); line1.BackgroundColor3=C.ACCENT_DIM; line1.BorderSizePixel=0
     local lbl=Instance.new("TextLabel",F); lbl.Size=UDim2.new(0.64,0,1,0); lbl.Position=UDim2.new(0.18,0,0,0); lbl.BackgroundTransparency=1
-    lbl.Text="— "..text:upper().." —"; lbl.TextColor3=C.ACCENT; lbl.Font=Enum.Font.GothamBold; lbl.TextSize=px(10); lbl.TextXAlignment=Enum.TextXAlignment.Center
+    lbl.Text="â "..text:upper().." â"; lbl.TextColor3=C.ACCENT; lbl.Font=Enum.Font.GothamBold; lbl.TextSize=px(10); lbl.TextXAlignment=Enum.TextXAlignment.Center
     local line2=Instance.new("Frame",F); line2.Size=UDim2.new(0.18,0,0,1); line2.Position=UDim2.new(0.82,0,0.5,0); line2.BackgroundColor3=C.ACCENT_DIM; line2.BorderSizePixel=0
 end
 
@@ -1194,7 +1209,7 @@ local tbStr=Instance.new("UIStroke",TB); tbStr.Color=C.ACCENT; tbStr.Thickness=1
 TB.MouseButton1Click:Connect(function() Main.Visible=not Main.Visible end)
 
 -- ============================================================
---  FLOATING BUTTONS GRID (style image — visible PC + mobile)
+--  FLOATING BUTTONS GRID (style image â visible PC + mobile)
 -- ============================================================
 -- Dimensions d'un bouton
 local BW = px(52)   -- largeur
@@ -1202,7 +1217,7 @@ local BH = px(46)   -- hauteur
 local BGAP = px(5)  -- gap entre boutons
 local BCOLS = 2      -- 2 colonnes
 
--- Conteneur principal — ancré en bas à droite
+-- Conteneur principal â ancrÃ© en bas Ã  droite
 local FBGrid = Instance.new("Frame", SG)
 FBGrid.Name = "FloatGrid"
 FBGrid.BackgroundColor3 = Color3.fromRGB(8, 8, 12)
@@ -1232,7 +1247,7 @@ FBPad.PaddingRight = UDim.new(0, BGAP)
 local GRID_W = BCOLS * BW + (BCOLS + 1) * BGAP
 FBGrid.Size = UDim2.new(0, GRID_W, 0, 0)
 
--- Position : coin bas droit (décalé selon le toggle button)
+-- Position : coin bas droit (dÃ©calÃ© selon le toggle button)
 local function repositionGrid()
     local rows = math.ceil(#FBGridLayout:GetChildren() == 0 and 1 or 1)
     FBGrid.Position = UDim2.new(1, -(GRID_W + px(10)), 1, -px(10))
@@ -1259,7 +1274,7 @@ UserInputService.InputEnded:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then fbDragging = false end
 end)
 
--- Créateur de bouton grille
+-- CrÃ©ateur de bouton grille
 local floatBtns = {}
 local function makeFB(name, topLabel, subLabel, order, cb)
     local Btn = Instance.new("TextButton", FBGrid)
@@ -1293,7 +1308,7 @@ local function makeFB(name, topLabel, subLabel, order, cb)
     L2.TextSize = px(7)
     L2.TextXAlignment = Enum.TextXAlignment.Center
 
-    -- Point indicateur centré en bas
+    -- Point indicateur centrÃ© en bas
     local DSz = px(10)
     local Dot = Instance.new("TextButton", Btn)
     Dot.Size = UDim2.new(0, DSz, 0, DSz)
@@ -1323,7 +1338,7 @@ local function makeFB(name, topLabel, subLabel, order, cb)
     floatBtns[name].updateVisual = updateVisual
 end
 
--- ---- CRÉER TOUS LES BOUTONS ----
+-- ---- CRÃER TOUS LES BOUTONS ----
 makeFB("BatAimbot", "BAT", "MODE", 1, function(s)
     setBatAimbot(s)
     floatBtns["BatAimbot"].updateVisual(batAimbotToggled)
@@ -1517,7 +1532,7 @@ LocalPlayer.CharacterAdded:Connect(function(c)
     setupChar(c)
     -- Reset TP state on respawn
     ragdollWasActive = false
-    -- Si un TP était actif, on re-TP automatiquement du même côté
+    -- Si un TP Ã©tait actif, on re-TP automatiquement du mÃªme cÃ´tÃ©
     if ragdollAutoActive then
         task.wait(0.5)
         if lastTpSide == "left" then
