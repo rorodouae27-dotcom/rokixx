@@ -1197,9 +1197,9 @@ TB.MouseButton1Click:Connect(function() Main.Visible=not Main.Visible end)
 --  FLOATING BUTTONS GRID (style image — visible PC + mobile)
 -- ============================================================
 -- Dimensions d'un bouton
-local BW = px(72)   -- largeur
-local BH = px(64)   -- hauteur
-local BGAP = px(6)  -- gap entre boutons
+local BW = px(52)   -- largeur
+local BH = px(46)   -- hauteur
+local BGAP = px(5)  -- gap entre boutons
 local BCOLS = 2      -- 2 colonnes
 
 -- Conteneur principal — ancré en bas à droite
@@ -1273,31 +1273,31 @@ local function makeFB(name, topLabel, subLabel, order, cb)
 
     -- Label principal (ex: "BAT")
     local L1 = Instance.new("TextLabel", Btn)
-    L1.Size = UDim2.new(1, -px(6), 0, px(18))
-    L1.Position = UDim2.new(0, px(3), 0, px(8))
+    L1.Size = UDim2.new(1, -px(4), 0, px(13))
+    L1.Position = UDim2.new(0, px(2), 0, px(5))
     L1.BackgroundTransparency = 1
     L1.Text = topLabel
     L1.TextColor3 = C.WHITE
     L1.Font = Enum.Font.GothamBold
-    L1.TextSize = px(13)
+    L1.TextSize = px(10)
     L1.TextXAlignment = Enum.TextXAlignment.Center
 
     -- Sous-label (ex: "MODE")
     local L2 = Instance.new("TextLabel", Btn)
-    L2.Size = UDim2.new(1, -px(6), 0, px(12))
-    L2.Position = UDim2.new(0, px(3), 0, px(27))
+    L2.Size = UDim2.new(1, -px(4), 0, px(9))
+    L2.Position = UDim2.new(0, px(2), 0, px(19))
     L2.BackgroundTransparency = 1
     L2.Text = subLabel
     L2.TextColor3 = C.TEXT_DIM
     L2.Font = Enum.Font.Gotham
-    L2.TextSize = px(9)
+    L2.TextSize = px(7)
     L2.TextXAlignment = Enum.TextXAlignment.Center
 
     -- Point indicateur centré en bas
-    local DSz = px(14)
+    local DSz = px(10)
     local Dot = Instance.new("TextButton", Btn)
     Dot.Size = UDim2.new(0, DSz, 0, DSz)
-    Dot.Position = UDim2.new(0.5, -DSz/2, 1, -DSz - px(6))
+    Dot.Position = UDim2.new(0.5, -DSz/2, 1, -DSz - px(4))
     Dot.BackgroundColor3 = C.DOT_OFF
     Dot.BorderSizePixel = 0
     Dot.Text = ""
