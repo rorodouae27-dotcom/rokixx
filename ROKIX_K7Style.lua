@@ -674,44 +674,63 @@ local function doTPRight()
     lastTpSide = "right"
 end
 
-local function isRagdolledChar()
+local function isKnockedChar()
     if not char then return false end
     local h2 = char:FindFirstChildOfClass("Humanoid")
     if h2 then
         local st = h2:GetState()
-        if st == Enum.HumanoidStateType.Ragdoll or st == Enum.HumanoidStateType.Physics or st == Enum.HumanoidStateType.FallingDown then return true end
+        -- Tous les états qui indiquent un coup reçu
+        if st == Enum.HumanoidStateType.Ragdoll
+        or st == Enum.HumanoidStateType.Physics
+        or st == Enum.HumanoidStateType.FallingDown
+        or st == Enum.HumanoidStateType.GettingUp then
+            return true
+        end
     end
+    -- BoolValue "Ragdoll" / "IsRagdoll" que certains jeux utilisent
     local rv = char:FindFirstChild("Ragdoll") or char:FindFirstChild("IsRagdoll")
     if rv and rv:IsA("BoolValue") and rv.Value then return true end
+    -- Vélocité Y très négative = on vient de se faire envoyer
+    if hrp and hrp.AssemblyLinearVelocity.Y < -35 then return true end
+    -- BallSocketConstraints = ragdoll physique actif
+    for _, d in ipairs(char:GetDescendants()) do
+        if d:IsA("BallSocketConstraint") then return true end
+    end
     return false
 end
 
+local lastKnockTime = 0
 local function startRagdollDetector()
     if ragdollDetConn then ragdollDetConn:Disconnect() end
     ragdollDetConn = RunService.Heartbeat:Connect(function()
         if not ragdollAutoActive or not char then return end
-        local nowRag = isRagdolledChar()
-        if nowRag and not ragdollWasActive then
+        local nowKnocked = isKnockedChar()
+        if nowKnocked and not ragdollWasActive then
+            -- Anti-spam : pas plus d'un TP toutes les 1.5 secondes
+            if tick() - lastKnockTime < 1.5 then return end
+            lastKnockTime = tick()
             ragdollWasActive = true
             task.spawn(function()
-                task.wait(0.15)
+                task.wait(0.1) -- laisser le jeu finir l'animation du coup
                 if lastTpSide == "left" then
                     doTPLeft()
-                    task.wait(0.2)
+                    task.wait(0.15)
                     if not autoLeftEnabled then
                         autoLeftEnabled = true
                         nineStop(); nineStart("left")
                     end
                 elseif lastTpSide == "right" then
                     doTPRight()
-                    task.wait(0.2)
+                    task.wait(0.15)
                     if not autoRightEnabled then
                         autoRightEnabled = true
                         nineStop(); nineStart("right")
                     end
                 end
+                task.wait(0.5)
+                ragdollWasActive = false
             end)
-        elseif not nowRag then
+        elseif not nowKnocked then
             ragdollWasActive = false
         end
     end)
